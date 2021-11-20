@@ -16,12 +16,12 @@ sessions, and then sends it back to the VRGP service.
 The adapter can also initiate calls on its own (for example to initiate a
 connection to an MOC). It can then contact one of the VRGP service's endpoints.
 
-The communication happens through a REST API between the adapter and the VRGP
-service, and trough simple C++ function calls between the adapter and the boat.
+The communication happens through WebSockets between the adapter and the VRGP
+service, and trough OD4 Sessions between the adapter and the boat.
 
-## HTTP API framework
+## WebSockets solution
 
-The service is using [Pistache](https://github.com/pistacheio/pistache) as a HTTP server solution.
+The service is using [WebSocket++](https://github.com/zaphoyd/websocketpp) as a WebSockets solution.
 
 ## Building the project
 
