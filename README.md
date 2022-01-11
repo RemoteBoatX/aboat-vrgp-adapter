@@ -36,7 +36,8 @@ To build the project, simply do:
 
 This should build an image called `remoteboatx/aboat-vrgp-adapter:latest`.
 
-To run the image in a container:
-`docker run --rm remoteboatx/aboat-vrgp-adapter:latest`
+To run the image in a container (interactively, useful for inputting text at
+the keyboard):
+`docker run -it --rm remoteboatx/aboat-vrgp-adapter:latest`
 
 The last command above runs the service in a container, until it is stopped.
