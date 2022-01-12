@@ -100,6 +100,24 @@ void websocket_endpoint_wrapper::close(int id, websocketpp::close::status::value
     }
 }
 
+void websocket_endpoint_wrapper::send(int id, std::string message) {
+
+    websocketpp::lib::error_code ec;
+
+    con_list::iterator metadata_it = _connection_list.find(id);
+    if (metadata_it == _connection_list.end()) {
+        std::cout << "> No connection found with the given id" << std::endl;
+        return;
+    }
+
+    _endpoint.send(metadata_it->second->get_handler(), message, websocketpp::frame::opcode::text, ec);
+    if (ec) {
+        std::cout << "> Error closing connection: " << ec.message() << std::endl;
+    }
+
+    metadata_it->second->record_sent_message(message);
+}
+
 connection_metadata::ptr websocket_endpoint_wrapper::get_metadata(int id) const {
 
     con_list::const_iterator metadata_it = _connection_list.find(id);

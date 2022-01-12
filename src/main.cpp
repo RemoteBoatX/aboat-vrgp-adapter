@@ -24,6 +24,7 @@ void main_loop() {
                 << "\nCommand List:\n"
                 << "connect <ws uri>\n"
                 << "show <connection id>\n"
+                << "send <connection id> <message>\n"
                 << "close <connection id> <status code> <close reason>\n"
                 << "help: Display this help text\n"
                 << "quit: Exit the program\n"
@@ -42,6 +43,17 @@ void main_loop() {
             } else {
                 std::cout << "> Unknown connection id " << id << std::endl;
             }
+        } else if (input.substr(0,4) == "send") {
+            std::stringstream ss(input);
+
+            std::string cmd;
+            int id;
+            std::string message = "";
+
+            ss >> cmd >> id;
+            std::getline(ss, message);
+
+            endpoint_wrapper.send(id, message);
         } else if (input.substr(0,5) == "close") {
             std::stringstream ss(input);
 

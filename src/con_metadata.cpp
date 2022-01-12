@@ -39,11 +39,21 @@ void connection_metadata::on_close(configured_endpoint * endpoint, websocketpp::
     _error_reason = s.str();
 }
 
+void connection_metadata::record_sent_message(std::string message) {
+    _messages.push_back(">> " + message);
+}
+
 std::ostream & operator<< (std::ostream & out, connection_metadata const & data) {
     out << "> URI: " << data._uri << "\n"
         << "> Status: " << data._status << "\n"
         << "> Remote Server: " << (data._server.empty() ? "None Specified" : data._server) << "\n"
-        << "> Error/close reason: " << (data._error_reason.empty() ? "N/A" : data._error_reason);
+        << "> Error/close reason: " << (data._error_reason.empty() ? "N/A" : data._error_reason) << "\n"
+        << "> Messages:\n";
+
+    std::vector<std::string>::const_iterator it;
+    for (it = data._messages.begin(); it != data._messages.end(); ++it) {
+        out << "\t" << *it << "\n";
+    }
 
     return out;
 }

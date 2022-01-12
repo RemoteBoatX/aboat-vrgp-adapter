@@ -7,6 +7,8 @@
 #include <websocketpp/common/memory.hpp>
 
 #include <iostream>
+#include <vector>
+
 
 /**
  * Holds information about a specific connection.
@@ -44,6 +46,13 @@ public:
      */
     void on_close(configured_endpoint * c, websocketpp::connection_hdl handler);
 
+    /**
+     * Record a sent message for the connection.
+     *
+     * Acts like a message history.
+     */
+    void record_sent_message(std::string message);
+
     int get_id() const {
         return _id;
     }
@@ -76,5 +85,7 @@ private:
     std::string _server;
 
     std::string _error_reason;
+
+    std::vector<std::string> _messages;
 
 };

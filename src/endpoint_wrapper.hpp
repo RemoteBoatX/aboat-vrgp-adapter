@@ -62,6 +62,14 @@ public:
     void close(int id, websocketpp::close::status::value code, std::string reason);
 
     /**
+     * Send a message through a WebSocket connection.
+     *
+     * @param id The id of the connection.
+     * @param message The message to send.
+     */
+    void send(int id, std::string message);
+
+    /**
      * Returns metadata about a specific connection, or an empty metadata
      * pointer if the connection id is not available.
      *
