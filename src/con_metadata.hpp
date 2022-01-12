@@ -47,6 +47,11 @@ public:
     void on_close(configured_endpoint * c, websocketpp::connection_hdl handler);
 
     /**
+     * Handler for the message.
+     */
+    void on_message(websocketpp::connection_hdl handler, configured_endpoint::message_ptr msg);
+
+    /**
      * Record a sent message for the connection.
      *
      * Acts like a message history.

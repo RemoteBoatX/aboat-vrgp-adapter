@@ -3,22 +3,21 @@ const server = new WebSocket.Server({
     port: 8080
 });
 
-let sockets = [];
 server.on('connection', function(socket) {
 
     console.log('Got a new connection!');
 
-    sockets.push(socket);
+    while (socket.readyState !== WebSocket.OPEN) {}
 
-    // When you receive a message, send that message to every socket.
+    // when you receive a message, send that message back
+    // basic ping-pong echoing
     socket.on('message', function(msg) {
         console.log('Received: ' + msg);
-        sockets.forEach(s => s.send(msg));
+        socket.send(Buffer.from(msg, 'hex').toString('utf8'));
     });
 
-    // When a socket closes, or disconnects, remove it from the array.
+    // on close print a relevant message
     socket.on('close', function() {
         console.log('Closing connection: ' + socket);
-        sockets = sockets.filter(s => s !== socket);
     });
 });

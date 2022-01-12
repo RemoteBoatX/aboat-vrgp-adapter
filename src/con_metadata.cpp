@@ -39,6 +39,18 @@ void connection_metadata::on_close(configured_endpoint * endpoint, websocketpp::
     _error_reason = s.str();
 }
 
+void connection_metadata::on_message(websocketpp::connection_hdl handler, configured_endpoint::message_ptr msg) {
+    if (msg->get_opcode() == websocketpp::frame::opcode::text) {
+        std::cout << "text\n";
+        _messages.push_back("<< " + msg->get_payload());
+    } else if (msg->get_opcode() == websocketpp::frame::opcode::binary) {
+        std::cout << "binary\n";
+        _messages.push_back("<< " + websocketpp::utility::to_hex(msg->get_payload()));
+    } else {
+        std::cout << "Error when reading message!!\n";
+    }
+}
+
 void connection_metadata::record_sent_message(std::string message) {
     _messages.push_back(">> " + message);
 }

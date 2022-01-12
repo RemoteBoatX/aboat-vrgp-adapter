@@ -78,6 +78,14 @@ int websocket_endpoint_wrapper::connect(std::string const & uri) {
         websocketpp::lib::placeholders::_1
     ));
 
+    // run on message
+    con->set_message_handler(websocketpp::lib::bind(
+        &connection_metadata::on_message,
+        metadata_ptr,
+        websocketpp::lib::placeholders::_1,
+        websocketpp::lib::placeholders::_2
+    ));
+
     // in the end, open the connection
     _endpoint.connect(con);
 
