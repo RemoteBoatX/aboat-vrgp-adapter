@@ -23,7 +23,7 @@ include_directories(websocketpp)
 add_definitions(-D_WEBSOCKETPP_CPP11_STL_)
 
 # create the executable
-add_executable(${EXEC_NAME} src/main.cpp)
+add_executable(${EXEC_NAME} src/main.cpp src/endpoint_wrapper.cpp src/con_metadata.cpp)
 
 # link against the boost system libraries
 target_link_libraries(${EXEC_NAME} boost_system)
