@@ -11,7 +11,7 @@
 /**
  * Holds information about a specific connection.
  *
- * Also has handlers for the connection on open and on fail requests.
+ * Also has handlers for different events.
  */
 class connection_metadata {
 
@@ -38,6 +38,23 @@ public:
      * Handler for on fail.
      */
     void on_fail(configured_endpoint * c, websocketpp::connection_hdl handler);
+
+    /**
+     * Handler for on close.
+     */
+    void on_close(configured_endpoint * c, websocketpp::connection_hdl handler);
+
+    int get_id() const {
+        return _id;
+    }
+
+    websocketpp::connection_hdl get_handler() const {
+        return _handler;
+    }
+
+    std::string get_status() const {
+        return _status;
+    }
 
     /**
      * Standard toString method.

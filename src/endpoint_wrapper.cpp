@@ -15,6 +15,29 @@ websocket_endpoint_wrapper::websocket_endpoint_wrapper()
     _thread.reset(new websocketpp::lib::thread(&configured_endpoint::run, &_endpoint));
 }
 
+websocket_endpoint_wrapper::~websocket_endpoint_wrapper() {
+    _endpoint.stop_perpetual();
+
+    for (con_list::const_iterator it = _connection_list.begin(); it != _connection_list.end(); ++it) {
+        if (it->second->get_status() != "Open") {
+            // only close open connections
+            continue;
+        }
+
+        std::cout << "> Closing connection " << it->second->get_id() << std::endl;
+
+        websocketpp::lib::error_code ec;
+        _endpoint.close(it->second->get_handler(), websocketpp::close::status::going_away, "", ec);
+        if (ec) {
+            std::cout << "> Error closing connection " << it->second->get_id() << ": "
+                << ec.message() << std::endl;
+        }
+    }
+
+    // stop the running thread of background connections
+    _thread->join();
+}
+
 int websocket_endpoint_wrapper::connect(std::string const & uri) {
 
     websocketpp::lib::error_code ec;
@@ -47,10 +70,34 @@ int websocket_endpoint_wrapper::connect(std::string const & uri) {
         websocketpp::lib::placeholders::_1
     ));
 
+    // run on closed connection
+    con->set_close_handler(websocketpp::lib::bind(
+        &connection_metadata::on_close,
+        metadata_ptr,
+        &_endpoint,
+        websocketpp::lib::placeholders::_1
+    ));
+
     // in the end, open the connection
     _endpoint.connect(con);
 
     return new_id;
+}
+
+void websocket_endpoint_wrapper::close(int id, websocketpp::close::status::value code, std::string reason) {
+
+    websocketpp::lib::error_code ec;
+
+    con_list::iterator metadata_it = _connection_list.find(id);
+    if (metadata_it == _connection_list.end()) {
+        std::cout << "> No connection found with the given id" << std::endl;
+        return;
+    }
+
+    _endpoint.close(metadata_it->second->get_handler(), code, reason, ec);
+    if (ec) {
+        std::cout << "> Error closing connection: " << ec.message() << std::endl;
+    }
 }
 
 connection_metadata::ptr websocket_endpoint_wrapper::get_metadata(int id) const {

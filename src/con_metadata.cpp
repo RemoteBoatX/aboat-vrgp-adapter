@@ -26,6 +26,19 @@ void connection_metadata::on_fail(configured_endpoint *endpoint, websocketpp::co
     _error_reason = con->get_ec().message();
 }
 
+void connection_metadata::on_close(configured_endpoint * endpoint, websocketpp::connection_hdl handler) {
+    _status = "Closed";
+
+    configured_endpoint::connection_ptr con = endpoint->get_con_from_hdl(handler);
+    std::stringstream s;
+
+    s << "Close code: " << con->get_remote_close_code()
+        << " (" << websocketpp::close::status::get_string(con->get_remote_close_code())
+        << "), close readon: " << con->get_remote_close_reason();
+
+    _error_reason = s.str();
+}
+
 std::ostream & operator<< (std::ostream & out, connection_metadata const & data) {
     out << "> URI: " << data._uri << "\n"
         << "> Status: " << data._status << "\n"

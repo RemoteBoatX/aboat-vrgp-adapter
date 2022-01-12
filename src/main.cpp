@@ -1,4 +1,5 @@
 #include <iostream>
+#include <websocketpp/client.hpp>
 
 #include "endpoint_wrapper.hpp"
 
@@ -23,6 +24,7 @@ void main_loop() {
                 << "\nCommand List:\n"
                 << "connect <ws uri>\n"
                 << "show <connection id>\n"
+                << "close <connection id> <status code> <close reason>\n"
                 << "help: Display this help text\n"
                 << "quit: Exit the program\n"
                 << std::endl;
@@ -40,6 +42,18 @@ void main_loop() {
             } else {
                 std::cout << "> Unknown connection id " << id << std::endl;
             }
+        } else if (input.substr(0,5) == "close") {
+            std::stringstream ss(input);
+
+            std::string cmd;
+            int id;
+            int close_code = websocketpp::close::status::normal;
+            std::string reason;
+
+            ss >> cmd >> id >> close_code;
+            std::getline(ss, reason);
+
+            endpoint_wrapper.close(id, close_code, reason);
         } else {
             std::cout << "> Unrecognized Command" << std::endl;
         }

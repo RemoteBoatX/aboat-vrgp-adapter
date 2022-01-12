@@ -43,6 +43,7 @@ class websocket_endpoint_wrapper {
 public:
 
     websocket_endpoint_wrapper();
+    ~websocket_endpoint_wrapper();
 
     /**
      * Open a new WebSocket connection to the given URI.
@@ -52,8 +53,19 @@ public:
     int connect(std::string const & uri);
 
     /**
+     * Close a WebSocket connection.
+     *
+     * @param id The given id of the connection.
+     * @param code The status code reason of the connection closure.
+     * @param reason The text with the reason of the connection closure.
+     */
+    void close(int id, websocketpp::close::status::value code, std::string reason);
+
+    /**
      * Returns metadata about a specific connection, or an empty metadata
      * pointer if the connection id is not available.
+     *
+     * @id The given id of the connection.
      */
     connection_metadata::ptr get_metadata(int id) const;
 
