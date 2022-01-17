@@ -9,6 +9,11 @@ server.on('connection', function(socket) {
 
     while (socket.readyState !== WebSocket.OPEN) {}
 
+    setInterval(() => {
+        socket.send('hello there');
+        console.log('sending message');
+    }, 4000);
+
     // when you receive a message, send that message back
     // basic ping-pong echoing
     socket.on('message', function(msg) {
