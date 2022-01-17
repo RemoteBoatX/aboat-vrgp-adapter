@@ -27,14 +27,13 @@
  * @see https://docs.websocketpp.org/md_tutorials_utility_client_utility_client.html (step 2)
  *
  */
-typedef websocketpp::client<websocketpp::config::asio_client> configured_endpoint;
+typedef websocketpp::client<websocketpp::config::asio_client> client_endpoint;
 
 
 /**
  * Websocket setup wrapper for an endpoint configuration.
  *
- * Holds a configured endpoint, a list of all connections, and sets up the
- * background thread for websocket connections.
+ * Holds a configured endpoint and a connection to the VRGP service.
  *
  * Handles initialization and setting up the thread.
  */
@@ -42,64 +41,43 @@ class websocket_endpoint_wrapper {
 
 public:
 
-    websocket_endpoint_wrapper();
-    ~websocket_endpoint_wrapper();
-
     /**
-     * Open a new WebSocket connection to the given URI.
+     * Open a new WebSocket connection to the given URI of the VRGP service.
      *
      * @param uri The given URI to connect to.
      */
-    int connect(std::string const & uri);
+    websocket_endpoint_wrapper(std::string const & uri);
+
+    ~websocket_endpoint_wrapper();
 
     /**
-     * Close a WebSocket connection.
+     * Send a message through the WebSocket connection.
      *
-     * @param id The given id of the connection.
-     * @param code The status code reason of the connection closure.
-     * @param reason The text with the reason of the connection closure.
-     */
-    void close(int id, websocketpp::close::status::value code, std::string reason);
-
-    /**
-     * Send a message through a WebSocket connection.
-     *
-     * @param id The id of the connection.
      * @param message The message to send.
      */
-    void send(int id, std::string message);
-
-    /**
-     * Returns metadata about a specific connection, or an empty metadata
-     * pointer if the connection id is not available.
-     *
-     * @id The given id of the connection.
-     */
-    connection_metadata::ptr get_metadata(int id) const;
+    void send(std::string message);
 
 private:
-
-    /**
-     * Incrementing id's for connections.
-     */
-    int _next_id;
 
     /**
      * The configured endpoint. Additional configuration is set up in the
      * constructor.
      */
-    configured_endpoint _endpoint;
+    client_endpoint _client;
 
     /**
-     * A pointer to the background thread used for the websocket connections.
+     * The connection handler, used for sending messages etc.
+     */
+    websocketpp::connection_hdl _handler;
+
+    /**
+     * The VRGP connection.
+     */
+    websocketpp::lib::shared_ptr<connection_metadata> _connection;
+
+    /**
+     * Thread of the connection.
      */
     websocketpp::lib::shared_ptr<websocketpp::lib::thread> _thread;
 
-
-    /**
-     * A list of the connections.
-     */
-    typedef std::map<int, connection_metadata::ptr> con_list;
-
-    con_list _connection_list;
 };
