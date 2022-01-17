@@ -10,4 +10,13 @@ COPY . /aboat-vrgp-adapter
 RUN git clone https://github.com/zaphoyd/websocketpp /aboat-vrgp-adapter/websocketpp
 
 RUN cd /aboat-vrgp-adapter && mkdir build && cd build && cmake .. && make
+
+ARG vrgp_ip_address=127.0.0.1
+ARG vrgp_ip_port=8080
+ARG vrgp_ip_path=/
+
+ENV VRGP_IP_ADDRESS=$vrgp_ip_address
+ENV VRGP_IP_PORT=$vrgp_ip_port
+ENV VRGP_IP_PATH=$vrgp_ip_path
+
 CMD /aboat-vrgp-adapter/build/adapter
