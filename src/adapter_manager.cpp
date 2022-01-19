@@ -35,6 +35,11 @@ adapter_manager::adapter_manager(std::string const & url)
 
 adapter_manager::~adapter_manager() {
 
+#ifdef BUILD_DEBUG
+    assert(_client_thread_ptr != nullptr);
+    assert(_opendlv_handler_thread_ptr != nullptr);
+#endif
+
     _client_thread_ptr->join();
     _opendlv_handler_thread_ptr->join();
 }
@@ -51,6 +56,11 @@ void adapter_manager::run() {
         &vrgp_adapter::opendlv_handler::run,
         _opendlv_handler_ptr
     );
+
+#ifdef BUILD_DEBUG
+    assert(_client_thread_ptr != nullptr);
+    assert(_opendlv_handler_thread_ptr != nullptr);
+#endif
 
 }
 

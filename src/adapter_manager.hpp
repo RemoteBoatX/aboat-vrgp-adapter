@@ -2,6 +2,10 @@
 
 #include <string>
 
+#ifdef BUILD_DEBUG
+ #include <cassert>
+#endif
+
 #include "websocket_client.hpp"
 #include "opendlv_handler.hpp"
 
@@ -35,6 +39,9 @@ public:
      * (proxy).
      */
     void send(std::string msg) {
+#ifdef BUILD_DEBUG
+        assert(_client_ptr != nullptr);
+#endif
         _client_ptr->send(msg);
     }
 
@@ -43,6 +50,9 @@ public:
      * (proxy).
      */
     void on_receive(std::string msg) {
+#ifdef BUILD_DEBUG
+        assert(_opendlv_handler_ptr != nullptr);
+#endif
         _opendlv_handler_ptr->on_receive(msg);
     }
 

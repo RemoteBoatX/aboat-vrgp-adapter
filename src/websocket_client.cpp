@@ -6,12 +6,13 @@ websocket_client::websocket_client(
         std::string const & url,
         websocketpp::lib::function<void (std::string)> on_receive_func) {
 
-    // set logging to be pretty verbose (everything except message payloads)
+    // set logging to be pretty verbose
     _connection.set_access_channels(websocketpp::log::alevel::all);
-    //TODO
-/* #ifndef BUILD_DEBUG */
+
+#ifndef BUILD_DEBUG
+    // excluse message payload in debug builds
     _connection.clear_access_channels(websocketpp::log::alevel::frame_payload);
-/* #endif */
+#endif
 
     // init ASIO
     _connection.init_asio();
