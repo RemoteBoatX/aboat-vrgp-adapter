@@ -26,13 +26,13 @@ public:
      * handlers.
      *
      * @param url The url of the VRGP service.
-     * @param on_receive The <code>on_receive</code> function that should be
+     * @param on_receive_func The <code>on_receive</code> function that should be
      *                  called when receiving a message.
      * @throws websocketpp::exception When the connection couldn't be opened.
      */
     websocket_client(
             std::string const & url,
-            std::function<void (std::string)> on_receive);
+            std::function<void (std::string)> on_receive_func);
 
     ~websocket_client();
 

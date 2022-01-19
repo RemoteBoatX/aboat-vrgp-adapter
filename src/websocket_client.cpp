@@ -4,7 +4,7 @@ namespace vrgp_adapter {
 
 websocket_client::websocket_client(
         std::string const & url,
-        std::function<void (std::string)> on_receive) {
+        std::function<void (std::string)> on_receive_func) {
 
     // set logging to be pretty verbose (everything except message payloads)
     _connection.set_access_channels(websocketpp::log::alevel::all);
@@ -34,7 +34,7 @@ websocket_client::websocket_client(
     con_ptr->set_message_handler(websocketpp::lib::bind(
         &vrgp_adapter::websocket_client::on_message,
         this,
-        on_receive,
+        on_receive_func,
         websocketpp::lib::placeholders::_1,
         websocketpp::lib::placeholders::_2
     ));
@@ -60,7 +60,7 @@ void websocket_client::send(std::string msg) {
 
     websocketpp::lib::error_code ec;
 
-    _client.send(_handler, msg, websocketpp::frame::opcode::text, ec);
+    _connection.send(_handler, msg, websocketpp::frame::opcode::text, ec);
 
     if (ec) {
         throw websocketpp::exception(
