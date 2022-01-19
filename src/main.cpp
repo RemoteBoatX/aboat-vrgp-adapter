@@ -1,11 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include <unistd.h>
 
-#include <websocketpp/client.hpp>
-#include <websocketpp/config/asio_no_tls_client.hpp>
-
-#include "endpoint_wrapper.hpp"
+#include "adapter_manager.hpp"
 
 
 std::string get_vrgp_url() {
@@ -24,12 +20,18 @@ std::string get_vrgp_url() {
 }
 
 int main() {
-    // get the vrgp url
+    // get the vrgp service url
     std::string url = get_vrgp_url();
 
-    // create a client endpoint
-    websocket_endpoint_wrapper client(url);
+    try {
 
-    // TODO other logic of the program here
-    // send a message with `client.send(std::string)`.
+        // create an adapter manager, pass in the url of the VRGP service
+        vrgp_adapter::adapter_manager manager(url);
+
+        // start the manager
+        manager.run();
+
+    } catch(websocketpp::exception const & e) {
+        std::cout << e.what() << std::endl;
+    }
 }
