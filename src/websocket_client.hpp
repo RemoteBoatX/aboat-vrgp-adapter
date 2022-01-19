@@ -32,7 +32,7 @@ public:
      */
     websocket_client(
             std::string const & url,
-            std::function<void (std::string)> on_receive_func);
+            websocketpp::lib::function<void (std::string)> on_receive_func);
 
     ~websocket_client();
 
@@ -62,7 +62,7 @@ public:
      * @throws websocketpp::exception When the message couldn't be decoded.
      */
     void on_message(
-            std::function<void (std::string)> on_receive,
+            websocketpp::lib::function<void (std::string)> on_receive,
             websocketpp::connection_hdl handler,
             websocketpp::client<websocketpp::config::asio_client>::message_ptr msg);
 

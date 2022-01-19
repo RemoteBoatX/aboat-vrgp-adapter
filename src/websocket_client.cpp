@@ -4,13 +4,14 @@ namespace vrgp_adapter {
 
 websocket_client::websocket_client(
         std::string const & url,
-        std::function<void (std::string)> on_receive_func) {
+        websocketpp::lib::function<void (std::string)> on_receive_func) {
 
     // set logging to be pretty verbose (everything except message payloads)
     _connection.set_access_channels(websocketpp::log::alevel::all);
-#ifndef BUILD_DEBUG
+    //TODO
+/* #ifndef BUILD_DEBUG */
     _connection.clear_access_channels(websocketpp::log::alevel::frame_payload);
-#endif
+/* #endif */
 
     // init ASIO
     _connection.init_asio();
@@ -69,8 +70,8 @@ void websocket_client::send(std::string msg) {
     }
 }
 
-void on_message(
-        std::function<void (std::string)> on_receive,
+void websocket_client::on_message(
+        websocketpp::lib::function<void (std::string)> on_receive,
         websocketpp::connection_hdl handler,
         websocketpp::client<websocketpp::config::asio_client>::message_ptr msg) {
 
