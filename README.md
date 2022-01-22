@@ -36,7 +36,22 @@ To build the project, simply do:
 
 This should build an image called `remoteboatx/aboat-vrgp-adapter:latest`.
 
-To run the image in a container:
-`docker run --rm remoteboatx/aboat-vrgp-adapter:latest`
+To run the image in a container (interactively, useful for inputting text at
+the keyboard):
+`docker run -it --rm remoteboatx/aboat-vrgp-adapter:latest`
 
 The last command above runs the service in a container, until it is stopped.
+
+## Test server
+
+A test NodeJS server can be found in `examples/`. The server can be started by
+running `node test.js`. It listens by default to WebSocket connections on port
+8080.
+
+To interface with it from the application that runs inside the Docker
+container, the host network has to be exposed to the container. This can be
+achieved in the following way for Linux:
+- in the list of commands to `docker run`, `--network="host"` can be added.
+  This exposes `localhost` within the Docker container as well, allowing the
+  application to connect to the test server at the address
+  `ws://localhost:8080/`.
