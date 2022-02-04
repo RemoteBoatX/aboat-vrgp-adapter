@@ -5,7 +5,6 @@
 #include <chrono>
 #include <thread>
 #include <string>
-#include <vessel_information.cpp>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;         
 
