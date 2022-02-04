@@ -12,7 +12,10 @@ using json = nlohmann::json;
 
 namespace vrgp_adapter {
 
-vessel_information::SensorInfo sensorInfo_obj;
+json componentInfo_json;
+json actuatorInfo_json;
+json sensorInfo_json;
+json signalInfo_json;
 
 opendlv_handler::opendlv_handler(websocketpp::lib::function<void (std::string)> send_func) {
     _send = send_func;
@@ -33,13 +36,13 @@ opendlv_handler::run() {
                         
             opendlv::body::SensorInfo msg = cluon::extractMessage<opendlv::body::SensorInfo>(std::move(env));
 
-            if(msg.description() != NULL) {SensorInfo.setDescriptio(msg.description());}
-            if(msg.x() != NULL) {SensorInfo.setX(msg.x());}
-            if(msg.y() != NULL) {SensorInfo.setY(msg.y());}
-            if(msg.z() != NULL) {SensorInfo.setZ(msg.z());}
-            if(msg.signalId() != NULL) {SensorInfo.setSignalId(msg.signalId());}
-            if(msg.accuracyStd() != NULL) {SensorInfo.setAccuracyStd(msg.accuracyStd());}
-            if(msg.minFrequency() != NULL) {SensorInfo.setMinFrequency(msg.minFrequency());}
+            if(msg.description() != NULL) {signalInfo["description"] = msg.description();}
+            if(msg.x() != NULL) {signalInfo["x"] = msg.x();}
+            if(msg.y() != NULL) {signalInfo["y"] = msg.y();}
+            if(msg.z() != NULL) {signalInfo["z"] = msg.z();}
+            if(msg.signalId() != NULL) {signalInfo["signalId"] = msg.signalId();}
+            if(msg.accuracyStd() != NULL) {signalInfo["accuracyStd"] = msg.accuracyStd();}
+            if(msg.minFrequency() != NULL) {signalInfo["minFrequency"] = msg.minFrequency();}
         };
     }
 
@@ -47,7 +50,7 @@ opendlv_handler::run() {
 
 }
 
-void opendlv_handler::on_receive(std::string msg) {
+std::string opendlv_handler::on_receive(std::string msg) {
 
     // should receive a message, decode it, and act accordingly (i.e. get the
     // data from the vessel etc.) --> It's JSON in the specification    
@@ -68,7 +71,7 @@ void opendlv_handler::on_receive(std::string msg) {
     } else if (json_msg.contains("acquire")) {
         acquired_dev = json_msg.at("acquire");
         if(acquired_dev.compare("SensorInfo") != 0) {
-            return 
+            return  sensorInfo_json.dump();
         }
     }
 }

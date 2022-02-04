@@ -32,7 +32,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DBUILD_DEBUG")
 
 # include the websocketpp git repo as a directory to search
 # for header and source files
-include_directories(websocketpp)
+include_directories(websocketpp nlohmann)
 
 # add specific macros to the program
 add_definitions(-D_WEBSOCKETPP_CPP11_STL_)
