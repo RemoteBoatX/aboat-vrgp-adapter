@@ -21,7 +21,7 @@ service, and trough OD4 Sessions between the adapter and the boat.
 
 ## WebSockets solution
 
-The service is using [WebSocket++](https://github.com/zaphoyd/websocketpp) as a WebSockets solution.
+[TODO]
 
 ## Building the project
 
