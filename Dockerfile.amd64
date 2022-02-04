@@ -7,7 +7,7 @@ FROM ubuntu as env_set
 
 ARG vrgp_ip_address=127.0.0.1
 ARG vrgp_ip_port=8080
-ARG vrgp_ip_path=/
+ARG vrgp_ip_path=/vessel
 
 ENV VRGP_IP_ADDRESS=$vrgp_ip_address
 ENV VRGP_IP_PORT=$vrgp_ip_port
