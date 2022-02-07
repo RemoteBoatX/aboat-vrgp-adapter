@@ -4,7 +4,8 @@ namespace vrgp_adapter {
 
 websocket_client::websocket_client(
         std::string const & url,
-        websocketpp::lib::function<void (std::string)> on_receive_func) {
+        websocketpp::lib::function<void (std::string)> on_receive_func)
+    : readyState(false) {
 
     // set logging to be pretty verbose
     _connection.set_access_channels(websocketpp::log::alevel::all);
@@ -31,6 +32,13 @@ websocket_client::websocket_client(
 
     // acquire the connection handler
     _handler = con_ptr->get_handle();
+
+    // callback to run on open connection
+    con_ptr->set_open_handler(websocketpp::lib::bind(
+        &vrgp_adapter::websocket_client::on_open,
+        this,
+        websocketpp::lib::placeholders::_1
+    ));
 
     // callback to run on message
     con_ptr->set_message_handler(websocketpp::lib::bind(
@@ -62,6 +70,8 @@ void websocket_client::send(std::string msg) {
 
     websocketpp::lib::error_code ec;
 
+    while (readyState != true) {}
+
     _connection.send(_handler, msg, websocketpp::frame::opcode::text, ec);
 
     if (ec) {
@@ -89,6 +99,12 @@ void websocket_client::on_message(
     }
 
     on_receive(message);
+}
+
+void websocket_client::on_open(websocketpp::connection_hdl hdl) {
+
+    // set the ready state to true
+    readyState = true;
 }
 
 } // namespace vrgp_adapter
