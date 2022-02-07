@@ -2,7 +2,7 @@
 
 namespace vrgp_adapter {
 
-adapter_manager::adapter_manager(std::string const & url) 
+adapter_manager::adapter_manager(std::string const & url)
         : _client_ptr(nullptr),
             _client_thread_ptr(nullptr),
             _opendlv_handler_ptr(nullptr),
