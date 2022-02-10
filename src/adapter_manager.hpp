@@ -15,7 +15,7 @@ namespace vrgp_adapter {
 /**
  * The top class of the adapter service.
  *
- * Takes care of getting/serving the sensor data from the Åboat. and processing
+ * Takes care of getting/serving the sensor data from the Åboat and processing
  * web socket requests from the VRGP service.
  */
 class adapter_manager {

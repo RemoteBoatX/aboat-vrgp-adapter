@@ -14,9 +14,6 @@ void setBuildStatus(String message, String state) {
 //     def dockerfile = "Dockerfile.amd64"
 //     def dockerImage = docker.build("remoteboatx/aboat-vrgp-adapter:latest", "-f ${dockerfile} .")
 // }
-//
-//
-
 
 pipeline {
     agent any
@@ -45,7 +42,6 @@ pipeline {
             }
         }
     }
-
 
     post {
         success {
