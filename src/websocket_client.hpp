@@ -6,6 +6,7 @@
 #include <websocketpp/common/memory.hpp>
 
 #include <string>
+#include <atomic>
 
 
 namespace vrgp_adapter {
@@ -26,13 +27,15 @@ public:
      * handlers.
      *
      * @param url The url of the VRGP service.
-     * @param on_receive_func The <code>on_receive</code> function that should be
-     *                  called when receiving a message.
+     * @param on_receive_func The <code>on_receive</code> function that should
+     *                  be called when receiving a message.
+     * @param done Whether the WebSocket connection should be closed or not.
      * @throws websocketpp::exception When the connection couldn't be opened.
      */
     websocket_client(
             std::string const & url,
-            websocketpp::lib::function<void (std::string)> on_receive_func);
+            websocketpp::lib::function<void (std::string)> on_receive_func,
+            std::atomic_bool& done);
 
     ~websocket_client();
 
@@ -80,6 +83,11 @@ private:
      * The connection handler (or identifier).
      */
     websocketpp::connection_hdl _handler;
+
+    /**
+     * Whether the WebSocket connection should be closed or not.
+     */
+    std::atomic_bool& _done;
 
 };
 

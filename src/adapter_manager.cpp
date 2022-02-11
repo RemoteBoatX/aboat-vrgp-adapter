@@ -6,7 +6,8 @@ adapter_manager::adapter_manager(std::string const & url)
         : _client_ptr(nullptr),
             _client_thread_ptr(nullptr),
             _opendlv_handler_ptr(nullptr),
-            _opendlv_handler_thread_ptr(nullptr) {
+            _opendlv_handler_thread_ptr(nullptr),
+            _done(false) {
 
     // convert the member function to a normal function, that takes in an extra
     // parameter (the `this` object)
@@ -18,7 +19,7 @@ adapter_manager::adapter_manager(std::string const & url)
     auto on_receive_func = std::bind(f_ws, this, std::placeholders::_1);
 
     // create a websocket client instance
-    _client_ptr = websocketpp::lib::make_shared<vrgp_adapter::websocket_client>(url, on_receive_func);
+    _client_ptr = websocketpp::lib::make_shared<vrgp_adapter::websocket_client>(url, on_receive_func, _done);
 
     // convert the member function to a normal function, that takes in an extra
     // parameter (the `this` object)
@@ -30,7 +31,7 @@ adapter_manager::adapter_manager(std::string const & url)
     auto send_func = std::bind(f_odv_hdl, this, std::placeholders::_1);
 
     // create an opendlv handler instance
-    _opendlv_handler_ptr = websocketpp::lib::make_shared<vrgp_adapter::opendlv_handler>(send_func);
+    _opendlv_handler_ptr = websocketpp::lib::make_shared<vrgp_adapter::opendlv_handler>(send_func, _done);
 }
 
 adapter_manager::~adapter_manager() {
