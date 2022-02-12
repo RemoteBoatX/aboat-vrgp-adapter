@@ -23,6 +23,10 @@ service, and trough OD4 Sessions between the adapter and the boat.
 
 The service is using [WebSocket++](https://github.com/zaphoyd/websocketpp) as a WebSockets solution.
 
+## Json solution
+
+The service is using [C++ Json](https://github.com/nlohmann/json) as a Json solution.
+
 ## Building the project
 
 ### Dependencies
@@ -38,20 +42,14 @@ This should build an image called `remoteboatx/aboat-vrgp-adapter:latest`.
 
 To run the image in a container (interactively, useful for inputting text at
 the keyboard):
-`docker run -it --rm remoteboatx/aboat-vrgp-adapter:latest`
+`docker run -it --rm --network="host" remoteboatx/aboat-vrgp-adapter:latest`
 
-The last command above runs the service in a container, until it is stopped.
+The last command above runs the service in a container, until it is stopped. The
+network it runs on is the same as the host's network, so it can be accessed
+normally through `localhost`.
 
 ## Test server
 
 A test NodeJS server can be found in `examples/`. The server can be started by
 running `node test.js`. It listens by default to WebSocket connections on port
 8080.
-
-To interface with it from the application that runs inside the Docker
-container, the host network has to be exposed to the container. This can be
-achieved in the following way for Linux:
-- in the list of commands to `docker run`, `--network="host"` can be added.
-  This exposes `localhost` within the Docker container as well, allowing the
-  application to connect to the test server at the address
-  `ws://localhost:8080/`.
