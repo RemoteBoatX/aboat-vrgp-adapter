@@ -3,6 +3,8 @@
 #include <websocketpp/common/functional.hpp>
 #include <websocketpp/common/memory.hpp>
 
+#include <nlohmann/json.hpp>
+
 #include "cluon_complete.hpp"
 #include "connection_messages.hpp"
 
