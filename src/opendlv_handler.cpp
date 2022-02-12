@@ -62,7 +62,27 @@ void opendlv_handler::on_receive(std::string msg) {
     // TODO(joan) opendlv receive logic
     // should receive a message, decode it, and act accordingly (i.e. get the
     // data from the vessel etc.)
-    std::cout << msg << "\n";
+
+    // create a json object
+    nlohmann::json json;
+
+    // parse the json from the message received from the VRGP service
+    json.parse(msg);
+
+    // if the json contains a close key, then send it further to the Åboat
+    if (json.contains("close")) {
+
+        cluon::OD4Session od4{_od4_session};
+
+        if (od4.isRunning()) {
+
+            ConnectionClose conn;
+
+            conn.url(json["close"]);
+
+            od4.send(conn);
+        }
+    }
 }
 
 } // namespace vrgp_adapter
