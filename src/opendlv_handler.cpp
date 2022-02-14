@@ -3,21 +3,26 @@
 namespace vrgp_adapter {
 
 opendlv_handler::opendlv_handler(websocketpp::lib::function<void (std::string)> send_func, std::atomic_bool& done)
-    : _send(send_func), _done(done) {
-    // get the OD4 session number from the environment variables
-    _od4_session = std::stoi(std::string(std::getenv("OD4_SESSION")));
+    : _send(send_func),
+      _done(done),
+
+      // get the OD4 session number from the environment variables
+      _od4_session_nr(std::stoi(std::string(std::getenv("OD4_SESSION")))),
+
+      // create the OD4 session
+      _od4_session(_od4_session_nr) {
+
 }
 
 opendlv_handler::~opendlv_handler() {
 }
 
 void opendlv_handler::run() {
-    cluon::OD4Session od4{_od4_session};
 
     // if the od4 session is running, register method handlers for the
     // connection to the Åboat
     // (see 'connection_messages.odvd' for how the messages look like)
-    if (od4.isRunning()) {
+    if (_od4_session.isRunning()) {
 
         // runs on connection establishment
         auto onConnectionEstablish = [this](cluon::data::Envelope &&env) {
@@ -34,7 +39,7 @@ void opendlv_handler::run() {
         };
 
         // runs on connection closure
-        auto onConnectionClosure = [this](cluon::data::Envelope &&env) {
+        auto onConnectionClose = [this](cluon::data::Envelope &&env) {
 
             // extract the URL from the OpenDLV message
             ConnectionClose conn = cluon::extractMessage<ConnectionClose>(std::move(env));
@@ -48,8 +53,8 @@ void opendlv_handler::run() {
         };
 
         // register the handlers
-        od4.dataTrigger(ConnectionEstablish::ID(), onConnectionEstablish);
-        od4.dataTrigger(ConnectionClose::ID(), onConnectionEstablish);
+        _od4_session.dataTrigger(ConnectionEstablish::ID(), onConnectionEstablish);
+        _od4_session.dataTrigger(ConnectionClose::ID(), onConnectionClose);
     }
 
     // keep the event loop running, in order for the opendlv message
@@ -67,22 +72,32 @@ void opendlv_handler::on_receive(std::string msg) {
     nlohmann::json json;
 
     // parse the json from the message received from the VRGP service
-    json.parse(msg);
+    try {
+        json = nlohmann::json::parse(msg);
+    } catch (nlohmann::detail::parse_error e) {
+        std::cout << "Couldn't parse JSON message, error: "
+            << e.what()
+            << ". Skipping message..."
+            << std::endl;
+
+        goto parse_error;
+    }
 
     // if the json contains a close key, then send it further to the Åboat
     if (json.contains("close")) {
 
-        cluon::OD4Session od4{_od4_session};
-
-        if (od4.isRunning()) {
+        if (_od4_session.isRunning()) {
 
             ConnectionClose conn;
 
             conn.url(json["close"]);
 
-            od4.send(conn);
+            _od4_session.send(conn);
         }
     }
+
+parse_error:
+    ;
 }
 
 } // namespace vrgp_adapter

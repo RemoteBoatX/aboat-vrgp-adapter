@@ -11,10 +11,8 @@ websocket_client::websocket_client(
     // set logging to be pretty verbose
     _connection.set_access_channels(websocketpp::log::alevel::all);
 
-#ifndef BUILD_DEBUG
     // exclude message payload in release builds
     _connection.clear_access_channels(websocketpp::log::alevel::frame_payload);
-#endif
 
     // init ASIO
     _connection.init_asio();

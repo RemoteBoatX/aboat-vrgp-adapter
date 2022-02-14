@@ -56,14 +56,19 @@ private:
     websocketpp::lib::function<void (std::string)> _send;
 
     /**
-     * The session number of the OpenDLV messages.
-     */
-    uint16_t _od4_session;
-
-    /**
      * Whether or not the OpenDLV handler should stop running.
      */
     std::atomic_bool& _done;
+
+    /**
+     * The session number of the OpenDLV messages.
+     */
+    uint16_t _od4_session_nr;
+
+    /**
+     * The OpenDLV session used for communication with the Åboat.
+     */
+    cluon::OD4Session _od4_session;
 
 };
 
