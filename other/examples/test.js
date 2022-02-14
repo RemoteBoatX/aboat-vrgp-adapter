@@ -10,7 +10,7 @@ server.on('connection', function(socket) {
     while (socket.readyState !== WebSocket.OPEN) {}
 
     setInterval(() => {
-        socket.send('hello there');
+        socket.send('{"close": "ws-moc-url"}');
         console.log('sending message');
     }, 4000);
 
