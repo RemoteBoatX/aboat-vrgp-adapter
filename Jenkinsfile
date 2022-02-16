@@ -8,13 +8,7 @@ void setBuildStatus(String message, String state) {
     ]);
 }
 
-// node {
-//     checkout scm
-
-//     def dockerfile = "Dockerfile.amd64"
-//     def dockerImage = docker.build("remoteboatx/aboat-vrgp-adapter:latest", "-f ${dockerfile} .")
-// }
-
+//
 pipeline {
     agent any
 
@@ -22,20 +16,23 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    dockerImage = docker.build -f Dockerfile.amd64 --tag="remoteboatx/aboat-vrgp-adapter:latest" .
+                    sh 'docker build -f Dockerfile.amd64 --tag="remoteboatx/aboat-vrgp-adapter:latest" .'
                 }
             }
         }
 
         stage('Test') {
             steps {
+                sh 'echo hey'
                 // Commands for testing
             }
         }
-        stage('Deploy'){
-            steps{
-                script{
+
+        stage('Deploy') {
+            steps {
+                script {
                     if(env.BRANCH_NAME == 'main'){
+                        sh 'echo hey'
                         //Commands for deployment (only in main)
                     }
                 }
