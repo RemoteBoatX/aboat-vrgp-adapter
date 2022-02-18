@@ -53,3 +53,73 @@ normally through `localhost`.
 A test NodeJS server can be found in `examples/`. The server can be started by
 running `node test.js`. It listens by default to WebSocket connections on port
 8080.
+
+## API
+
+### Åboat
+
+The connection from the adapter to the Åboat is done through OpenDLV messages.
+The default session for the adapter is 111, though it can be changed inside the
+dockerfile.
+
+For the following messages to work, they should be compiled into an _hpp_ header
+file according to the Libcluon instructions from [here](https://wandbox.org/permlink/3S1bSOaLakXfdWWZ). Additionally, there
+is an already compiled header file with such messages in the sources folder,
+i.e. `src/connection_messages.hpp`.
+
+The API between the Åboat and the adapter is as follows:
+
+1) Connection request message (Åboat -> adapter): send a connection request to an MOC.
+
+```
+(connect.odvd)
+{
+message ConnectionEstablish [id = 1] {
+    string url [id = 1];
+}
+```
+  - `url`: specifies the url of the MOC to connect to.
+
+2) Disconnect request message (Åboat -> adapter OR adapter -> Åboat): 
+
+```
+(disconnect.odvd)
+message ConnectionClose [id = 2] {
+    string url [id = 1];
+}
+```
+  - `url`: specifies the url of the MOC to disconnect from/the url of the MOC that
+    disconnected.
+
+
+### VRGP service
+
+The API between the adapter and the VRGP service resembles almost perfectly the
+API between the Åboat and the adapter. The messages are mostly just translations
+to JSON.
+
+The API is as follows:
+
+1) Connection request message (adapter -> VRGP service): send a connection request to an MOC.
+
+```json
+{
+    "connect": {
+        "url": "<moc-url>"
+    }
+}
+```
+    - `<moc-url>`: specifies the url of the MOC to connect to.
+
+2) Disconnect request message (adapter -> VRGP service OR VRGP service ->
+adapter): 
+
+```json
+{
+    "bye": {
+        "url": "<moc-url>"
+    }
+}
+```
+  - `<moc-url>`: specifies the url of the MOC to disconnect from/the url of the MOC that
+    disconnected.

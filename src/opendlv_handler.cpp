@@ -32,7 +32,7 @@ void opendlv_handler::run() {
 
             // construct the JSON message
             nlohmann::json jsonMsg;
-            jsonMsg["connect"] = conn.url();
+            jsonMsg["connect"]["url"] = conn.url();
 
             // send the json message to the VRGP service
             _send(jsonMsg.dump());
@@ -46,7 +46,7 @@ void opendlv_handler::run() {
 
             // construct the JSON message
             nlohmann::json jsonMsg;
-            jsonMsg["close"] = conn.url();
+            jsonMsg["bye"]["url"] = conn.url();
 
             // send the json message to the VRGP service
             _send(jsonMsg.dump());
@@ -84,13 +84,13 @@ void opendlv_handler::on_receive(std::string msg) {
     }
 
     // if the json contains a close key, then send it further to the Åboat
-    if (json.contains("close")) {
+    if (json.contains("bye")) {
 
         if (_od4_session.isRunning()) {
 
             ConnectionClose conn;
 
-            conn.url(json["close"]);
+            conn.url(json["bye"]["url"]);
 
             _od4_session.send(conn);
         }
