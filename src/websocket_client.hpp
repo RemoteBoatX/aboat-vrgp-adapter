@@ -69,6 +69,15 @@ public:
             websocketpp::connection_hdl handler,
             websocketpp::client<websocketpp::config::asio_client>::message_ptr msg);
 
+    /**
+     * Run on connection open.
+     *
+     * Sets the ready state of the connection.
+     *
+     * @param handler The connection handler.
+     */
+    void on_open(websocketpp::connection_hdl handler);
+
 private:
 
     /**
@@ -88,6 +97,11 @@ private:
      * Whether the WebSocket connection should be closed or not.
      */
     std::atomic_bool& _done;
+
+    /**
+     * Whether the WebSocket connection is ready or not.
+     */
+    std::atomic_bool _readyState;
 
 };
 
