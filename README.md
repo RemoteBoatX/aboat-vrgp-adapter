@@ -109,7 +109,7 @@ The API is as follows:
     }
 }
 ```
-    - `<moc-url>`: specifies the url of the MOC to connect to.
+  - `<moc-url>`: specifies the url of the MOC to connect to.
 
 2) Disconnect request message (adapter -> VRGP service OR VRGP service ->
 adapter): 
