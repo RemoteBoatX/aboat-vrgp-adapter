@@ -6,6 +6,18 @@
 #include <iostream>
 #include <string>
 
+#include <chrono>
+#include <thread>
+
+#include "cluon-complete.hpp"
+#include "mymessages.hpp"
+#include "state.cpp"
+
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;  
+
+
 namespace vrgp_adapter {
 
 /**
