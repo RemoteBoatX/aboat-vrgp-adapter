@@ -79,6 +79,17 @@ private:
      */
     websocketpp::lib::shared_ptr<websocketpp::lib::thread> _opendlv_handler_thread_ptr;
 
+    /**
+     * Whether the adapter service (the program) should be stopped or not.
+     *
+     * This variable controls both the threads running the WebSocket connection
+     * and the OpenDLV handler.
+     *
+     * For example, when the WebSocket connection closes, so should the
+     * OpenDLV handler, and vice-versa.
+     */
+    std::atomic_bool _done;
+
 };
 
 } // namespace vrgp_adapter

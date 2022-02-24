@@ -1,0 +1,13 @@
+message ConnectionEstablish [id = 1] {
+    string url [id = 1];
+}
+
+message ConnectionClose [id = 2] {
+    string url [id = 1];
+}
+
+message ConnectionStatus [id = 3] {
+    string url      [id = 1];
+    string message  [id = 2];
+    uint32 code     [id = 3];
+}

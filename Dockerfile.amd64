@@ -1,9 +1,13 @@
 FROM ubuntu:18.04 as ubuntu
 
 RUN apt-get update
-RUN apt-get install -y build-essential cmake git libboost-all-dev
+RUN apt-get install -y build-essential cmake git libboost-all-dev curl
 
-RUN git clone https://github.com/zaphoyd/websocketpp /aboat-vrgp-adapter/websocketpp
+RUN git clone --depth 1 https://github.com/zaphoyd/websocketpp /aboat-vrgp-adapter/websocketpp
+RUN git clone --depth 1 https://github.com/nlohmann/json /aboat-vrgp-adapter/json
+
+RUN mkdir -p /aboat-vrgp-adapter/src
+RUN curl -o /aboat-vrgp-adapter/src/cluon_complete.hpp https://chberger.github.io/libcluon/headeronly/cluon-complete.hpp
 
 FROM ubuntu as env_set
 
@@ -14,6 +18,9 @@ ARG vrgp_ip_path=/vessel
 ENV VRGP_IP_ADDRESS=$vrgp_ip_address
 ENV VRGP_IP_PORT=$vrgp_ip_port
 ENV VRGP_IP_PATH=$vrgp_ip_path
+
+ARG od4_session=111
+ENV OD4_SESSION=$od4_session
 
 FROM env_set
 

@@ -23,6 +23,10 @@ service, and trough OD4 Sessions between the adapter and the boat.
 
 The service is using [WebSocket++](https://github.com/zaphoyd/websocketpp) as a WebSockets solution.
 
+## Json solution
+
+The service is using [C++ Json](https://github.com/nlohmann/json) as a Json solution.
+
 ## Building the project
 
 ### Dependencies
@@ -38,9 +42,11 @@ This should build an image called `remoteboatx/aboat-vrgp-adapter:latest`.
 
 To run the image in a container (interactively, useful for inputting text at
 the keyboard):
-`docker run -it --rm remoteboatx/aboat-vrgp-adapter:latest`
+`docker run -it --rm --network="host" remoteboatx/aboat-vrgp-adapter:latest`
 
-The last command above runs the service in a container, until it is stopped.
+The last command above runs the service in a container, until it is stopped. The
+network it runs on is the same as the host's network, so it can be accessed
+normally through `localhost`.
 
 ## Test server
 
@@ -48,10 +54,72 @@ A test NodeJS server can be found in `examples/`. The server can be started by
 running `node test.js`. It listens by default to WebSocket connections on port
 8080.
 
-To interface with it from the application that runs inside the Docker
-container, the host network has to be exposed to the container. This can be
-achieved in the following way for Linux:
-- in the list of commands to `docker run`, `--network="host"` can be added.
-  This exposes `localhost` within the Docker container as well, allowing the
-  application to connect to the test server at the address
-  `ws://localhost:8080/`.
+## API
+
+### Åboat
+
+The connection from the adapter to the Åboat is done through OpenDLV messages.
+The default session for the adapter is 111, though it can be changed inside the
+dockerfile.
+
+For the following messages to work, they should be compiled into an _hpp_ header
+file according to the Libcluon instructions from [here](https://wandbox.org/permlink/3S1bSOaLakXfdWWZ). Additionally, there
+is an already compiled header file with such messages in the sources folder,
+i.e. `src/connection_messages.hpp`.
+
+The API between the Åboat and the adapter is as follows:
+
+1) Connection request message (Åboat -> adapter): send a connection request to an MOC.
+
+```
+(connect.odvd)
+{
+message ConnectionEstablish [id = 1] {
+    string url [id = 1];
+}
+```
+  - `url`: specifies the url of the MOC to connect to.
+
+2) Disconnect request message (Åboat -> adapter OR adapter -> Åboat): 
+
+```
+(disconnect.odvd)
+message ConnectionClose [id = 2] {
+    string url [id = 1];
+}
+```
+  - `url`: specifies the url of the MOC to disconnect from/the url of the MOC that
+    disconnected.
+
+
+### VRGP service
+
+The API between the adapter and the VRGP service resembles almost perfectly the
+API between the Åboat and the adapter. The messages are mostly just translations
+to JSON.
+
+The API is as follows:
+
+1) Connection request message (adapter -> VRGP service): send a connection request to an MOC.
+
+```json
+{
+    "connect": {
+        "url": "<moc-url>"
+    }
+}
+```
+  - `<moc-url>`: specifies the url of the MOC to connect to.
+
+2) Disconnect request message (adapter -> VRGP service OR VRGP service ->
+adapter): 
+
+```json
+{
+    "bye": {
+        "url": "<moc-url>"
+    }
+}
+```
+  - `<moc-url>`: specifies the url of the MOC to disconnect from/the url of the MOC that
+    disconnected.
