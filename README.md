@@ -64,8 +64,8 @@ dockerfile.
 
 For the following messages to work, they should be compiled into an _hpp_ header
 file according to the Libcluon instructions from [here](https://wandbox.org/permlink/3S1bSOaLakXfdWWZ). Additionally, there
-is an already compiled header file with such messages in the sources folder,
-i.e. `src/connection_messages.hpp`.
+are already compiled header files with such messages in the sources folder,
+i.e. `src/connection_messages.hpp`, `src/notification_messages.hpp`.
 
 The API between the Åboat and the adapter is as follows:
 
