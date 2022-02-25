@@ -52,9 +52,231 @@ void opendlv_handler::run() {
             _send(jsonMsg.dump());
         };
 
+        // runs on debug notification
+        auto onDebugNotification = [this](cluon::data::Envelope &&env) {
+
+            DebugNotification notif = cluon::extractMessage<DebugNotification>(std::move(env));
+
+            nlohmann::json jsonMsg;
+
+            if (notif.msg() != "") {
+                jsonMsg["info"]["msg"] = notif.msg();
+            }
+
+            jsonMsg["info"]["id"] = notif.uuid();
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["category"] = notif.category();
+            }
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["source"] = notif.source();
+            }
+
+            if (notif.raised() != "") {
+                jsonMsg["info"]["raised"] = notif.raised();
+            }
+
+            if (notif.acknowledged() != "") {
+                jsonMsg["info"]["acknowledged"] = notif.acknowledged();
+            }
+
+            if (notif.cancelled() != "") {
+                jsonMsg["info"]["cancelled"] = notif.cancelled();
+            }
+
+            _send(jsonMsg.dump());
+        };
+
+        // runs on info notification
+        auto onInfoNotification = [this](cluon::data::Envelope &&env) {
+
+            InfoNotification notif = cluon::extractMessage<InfoNotification>(std::move(env));
+
+            nlohmann::json jsonMsg;
+
+            if (notif.msg() != "") {
+                jsonMsg["info"]["msg"] = notif.msg();
+            }
+
+            jsonMsg["info"]["id"] = notif.uuid();
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["category"] = notif.category();
+            }
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["source"] = notif.source();
+            }
+
+            if (notif.raised() != "") {
+                jsonMsg["info"]["raised"] = notif.raised();
+            }
+
+            if (notif.acknowledged() != "") {
+                jsonMsg["info"]["acknowledged"] = notif.acknowledged();
+            }
+
+            if (notif.cancelled() != "") {
+                jsonMsg["info"]["cancelled"] = notif.cancelled();
+            }
+
+            _send(jsonMsg.dump());
+        };
+
+        // runs on caution notification
+        auto onCautionNotification = [this](cluon::data::Envelope &&env) {
+
+            CautionNotification notif = cluon::extractMessage<CautionNotification>(std::move(env));
+
+            nlohmann::json jsonMsg;
+
+            if (notif.msg() != "") {
+                jsonMsg["info"]["msg"] = notif.msg();
+            }
+
+            jsonMsg["info"]["id"] = notif.uuid();
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["category"] = notif.category();
+            }
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["source"] = notif.source();
+            }
+
+            if (notif.raised() != "") {
+                jsonMsg["info"]["raised"] = notif.raised();
+            }
+
+            if (notif.acknowledged() != "") {
+                jsonMsg["info"]["acknowledged"] = notif.acknowledged();
+            }
+
+            if (notif.cancelled() != "") {
+                jsonMsg["info"]["cancelled"] = notif.cancelled();
+            }
+
+            _send(jsonMsg.dump());
+        };
+
+        // runs on warning notification
+        auto onWarningNotification = [this](cluon::data::Envelope &&env) {
+
+            WarningNotification notif = cluon::extractMessage<WarningNotification>(std::move(env));
+
+            nlohmann::json jsonMsg;
+
+            if (notif.msg() != "") {
+                jsonMsg["info"]["msg"] = notif.msg();
+            }
+
+            jsonMsg["info"]["id"] = notif.uuid();
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["category"] = notif.category();
+            }
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["source"] = notif.source();
+            }
+
+            if (notif.raised() != "") {
+                jsonMsg["info"]["raised"] = notif.raised();
+            }
+
+            if (notif.acknowledged() != "") {
+                jsonMsg["info"]["acknowledged"] = notif.acknowledged();
+            }
+
+            if (notif.cancelled() != "") {
+                jsonMsg["info"]["cancelled"] = notif.cancelled();
+            }
+
+            _send(jsonMsg.dump());
+        };
+
+        // runs on alarm notification
+        auto onAlarmNotification = [this](cluon::data::Envelope &&env) {
+
+            AlarmNotification notif = cluon::extractMessage<AlarmNotification>(std::move(env));
+
+            nlohmann::json jsonMsg;
+
+            if (notif.msg() != "") {
+                jsonMsg["info"]["msg"] = notif.msg();
+            }
+
+            jsonMsg["info"]["id"] = notif.uuid();
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["category"] = notif.category();
+            }
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["source"] = notif.source();
+            }
+
+            if (notif.raised() != "") {
+                jsonMsg["info"]["raised"] = notif.raised();
+            }
+
+            if (notif.acknowledged() != "") {
+                jsonMsg["info"]["acknowledged"] = notif.acknowledged();
+            }
+
+            if (notif.cancelled() != "") {
+                jsonMsg["info"]["cancelled"] = notif.cancelled();
+            }
+
+            _send(jsonMsg.dump());
+        };
+
+        // runs on emergency notification
+        auto onEmergencyNotification = [this](cluon::data::Envelope &&env) {
+
+            EmergencyNotification notif = cluon::extractMessage<EmergencyNotification>(std::move(env));
+
+            nlohmann::json jsonMsg;
+
+            if (notif.msg() != "") {
+                jsonMsg["info"]["msg"] = notif.msg();
+            }
+
+            jsonMsg["info"]["id"] = notif.uuid();
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["category"] = notif.category();
+            }
+
+            if (notif.category() != "") {
+                jsonMsg["info"]["source"] = notif.source();
+            }
+
+            if (notif.raised() != "") {
+                jsonMsg["info"]["raised"] = notif.raised();
+            }
+
+            if (notif.acknowledged() != "") {
+                jsonMsg["info"]["acknowledged"] = notif.acknowledged();
+            }
+
+            if (notif.cancelled() != "") {
+                jsonMsg["info"]["cancelled"] = notif.cancelled();
+            }
+
+            _send(jsonMsg.dump());
+        };
+
         // register the handlers
         _od4_session.dataTrigger(ConnectionEstablish::ID(), onConnectionEstablish);
         _od4_session.dataTrigger(ConnectionClose::ID(), onConnectionClose);
+        _od4_session.dataTrigger(DebugNotification::ID(), onDebugNotification);
+        _od4_session.dataTrigger(InfoNotification::ID(), onInfoNotification);
+        _od4_session.dataTrigger(CautionNotification::ID(), onCautionNotification);
+        _od4_session.dataTrigger(WarningNotification::ID(), onWarningNotification);
+        _od4_session.dataTrigger(AlarmNotification::ID(), onAlarmNotification);
+        _od4_session.dataTrigger(EmergencyNotification::ID(), onEmergencyNotification);
     }
 
     // keep the event loop running, in order for the opendlv message

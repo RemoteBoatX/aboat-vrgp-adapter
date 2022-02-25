@@ -64,8 +64,8 @@ dockerfile.
 
 For the following messages to work, they should be compiled into an _hpp_ header
 file according to the Libcluon instructions from [here](https://wandbox.org/permlink/3S1bSOaLakXfdWWZ). Additionally, there
-is an already compiled header file with such messages in the sources folder,
-i.e. `src/connection_messages.hpp`.
+are already compiled header files with such messages in the sources folder,
+i.e. `src/connection_messages.hpp`, `src/notification_messages.hpp`.
 
 The API between the Åboat and the adapter is as follows:
 
@@ -80,7 +80,7 @@ message ConnectionEstablish [id = 1] {
 ```
   - `url`: specifies the url of the MOC to connect to.
 
-2) Disconnect request message (Åboat -> adapter OR adapter -> Åboat): 
+2) Disconnect request message (Åboat -> adapter OR adapter -> Åboat):
 
 ```
 (disconnect.odvd)
@@ -90,6 +90,11 @@ message ConnectionClose [id = 2] {
 ```
   - `url`: specifies the url of the MOC to disconnect from/the url of the MOC that
     disconnected.
+
+3) Signals messages (Åboat -> adapter):
+- All the signal messages are the same as the VRGP specification (see [the
+  reference in the documentation for what the message contains](https://github.com/aboamare/vrgp-specifications/blob/master/Protocol%20specification.md#36-notifications)). The messages
+  from the Åboat to the adapter have to respect the specification.
 
 
 ### VRGP service
@@ -123,3 +128,8 @@ adapter):
 ```
   - `<moc-url>`: specifies the url of the MOC to disconnect from/the url of the MOC that
     disconnected.
+
+3) Signals messages (adapter -> VRGP service):
+- All the signal messages are the same as the VRGP specification (see [the
+  reference in the documentation for what the message contains](https://github.com/aboamare/vrgp-specifications/blob/master/Protocol%20specification.md#36-notifications)). The messages
+  from the adapter to the VRGP service respect that specification.

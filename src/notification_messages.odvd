@@ -1,0 +1,53 @@
+message DebugNotification [id = 11] {
+    string msg          [id = 1];
+    uint16 uuid         [id = 2];
+    string category     [id = 3];
+    string raised       [id = 4];
+    string acknowledged [id = 5];
+    string cancelled    [id = 6];
+}
+
+message InfoNotification [id = 12] {
+    string msg          [id = 1];
+    uint16 uuid         [id = 2];
+    string category     [id = 3];
+    string raised       [id = 4];
+    string acknowledged [id = 5];
+    string cancelled    [id = 6];
+}
+
+message CautionNotification [id = 13] {
+    string msg          [id = 1];
+    uint16 uuid         [id = 2];
+    string category     [id = 3];
+    string raised       [id = 4];
+    string acknowledged [id = 5];
+    string cancelled    [id = 6];
+}
+
+message WarningNotification [id = 14] {
+    string msg          [id = 1];
+    uint16 uuid         [id = 2];
+    string category     [id = 3];
+    string raised       [id = 4];
+    string acknowledged [id = 5];
+    string cancelled    [id = 6];
+}
+
+message AlarmNotification [id = 15] {
+    string msg          [id = 1];
+    uint16 uuid         [id = 2];
+    string category     [id = 3];
+    string raised       [id = 4];
+    string acknowledged [id = 5];
+    string cancelled    [id = 6];
+}
+
+message EmergencyNotification [id = 16] {
+    string msg          [id = 1];
+    uint16 uuid         [id = 2];
+    string category     [id = 3];
+    string raised       [id = 4];
+    string acknowledged [id = 5];
+    string cancelled    [id = 6];
+}

@@ -7,6 +7,7 @@
 
 #include "cluon_complete.hpp"
 #include "connection_messages.hpp"
+#include "notification_messages.hpp"
 
 #include <iostream>
 #include <string>
