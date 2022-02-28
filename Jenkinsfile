@@ -8,25 +8,31 @@ void setBuildStatus(String message, String state) {
     ]);
 }
 
+//
 pipeline {
     agent any
 
     stages {
         stage('Build') {
             steps {
-                // Commands for building
+                script {
+                    sh 'docker build -f Dockerfile.amd64 --tag="remoteboatx/aboat-vrgp-adapter:latest" .'
+                }
             }
         }
 
         stage('Test') {
             steps {
+                sh 'echo hey'
                 // Commands for testing
             }
         }
-        stage('Deploy'){
-            steps{
-                script{
+
+        stage('Deploy') {
+            steps {
+                script {
                     if(env.BRANCH_NAME == 'main'){
+                        sh 'echo hey'
                         //Commands for deployment (only in main)
                     }
                 }
