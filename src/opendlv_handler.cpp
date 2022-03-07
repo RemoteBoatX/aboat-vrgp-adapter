@@ -13,6 +13,7 @@ opendlv_handler::~opendlv_handler() {
 
 opendlv_handler::run() {
 
+    json conning_msg;
     // We set specific setup for every different odvd message
 
     cluon::OD4Session od4{150};
@@ -20,7 +21,7 @@ opendlv_handler::run() {
     if(od4.isRunning()) {
         auto onSensorInfo = [](cluon::data::Envelope &&env){                    
             opendlv::body::SensorInfo msg = cluon::extractMessage<opendlv::body::SensorInfo>(std::move(env));
-            json sensorInfo_json;
+            json sensorInfo_json;        
 
             if(msg.description() != NULL) {signalInfo["description"] = msg.description();}
             if(msg.x() != NULL) {signalInfo["x"] = msg.x();}
@@ -193,13 +194,33 @@ opendlv_handler::run() {
             opendlv::logic::sensation::Geolocation msg = cluon::extractMessage<opendlv::logic::sensation::Geolocation>(std::move(env));
             json geolocation_json;
 
-            if(msg.latitude() != NULL) {signalInfo["latitude"] = msg.latitude();}
-            if(msg.longitude() != NULL) {signalInfo["longitude"] = msg.longitude();}
-            if(msg.altitude() != NULL) {signalInfo["altitude"] = msg.altitude();}
-            if(msg.heading() != NULL) {signalInfo["heading"] = msg.heading();}
+            if(msg.latitude() != NULL) {
+                signalInfo["latitude"] = msg.latitude();
+                conning_msg["geolocation"]["lat"] = msg.latitude();                
+            }
+            if(msg.longitude() != NULL) {
+                signalInfo["longitude"] = msg.longitude();
+                conning_msg["geolocation"]["long"] = msg.longitude();
+            }
+            if(msg.altitude() != NULL) {
+                signalInfo["altitude"] = msg.altitude();
+                conning_msg["geolocation"]["alt"] = msg.altitude();
+            }
+            if(msg.heading() != NULL) {
+                signalInfo["heading"] = msg.heading();
+                conning_msg["geolocation"]["heading"] = msg.heading()
+            }
             
             stateInfo.setGeolocation(geolocation_json);
         };
+
+
+        // To fix --> only in conning for now
+        auto onGroundSpeedReading = [](cluon::data::Envelope &&env){
+            opendlv::proxy::GroundSpeedReading msg = cluon::extractMessage<opendlv::proxy::GroundSpeedReading>(std::move(env));
+                conning_msg["GroundSpeedReading"]["cog"] = msg.groundSpeed();
+                conning_msg["GroundSpeedReading"]["sog"] = msg.groundSpeed();
+        }
 
     }
 
@@ -273,6 +294,8 @@ opendlv_handler::on_receive(std::string msg) {
             _send(stateInfo.getNetworkStatusMessage());
         } else if (requested_dev.compare("Geolocation") != 0) {
             _send(stateInfo.getGeolocation());
+        } else if (requested_dev.compare("conning") != 0) {
+            _send(conning_msg);
         }
     }
 }
