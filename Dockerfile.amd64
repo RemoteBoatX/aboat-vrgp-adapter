@@ -7,7 +7,7 @@ RUN git clone --depth 1 https://github.com/zaphoyd/websocketpp /aboat-vrgp-adapt
 RUN git clone --depth 1 https://github.com/nlohmann/json /aboat-vrgp-adapter/json
 
 RUN mkdir -p /aboat-vrgp-adapter/src
-RUN curl -o /aboat-vrgp-adapter/src/cluon_complete.hpp https://chrberger.github.io/libcluon/headeronly/cluon-complete.hpp
+RUN curl -o /aboat-vrgp-adapter/src/cluon_complete.hpp http://www.christianberger.net/libcluon/headeronly/cluon-complete.hpp
 
 FROM ubuntu as env_set
 
