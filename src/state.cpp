@@ -12,12 +12,14 @@ private:
 	std::string magneticFieldReading_json;
 	std::string altitudeReading_json;
 	std::string pressureReading_json;
+	std::string temperatureReading_json;
 	std::string imageReadingShared_json;
-	std::string pointCloudReadingShared_json;
+	std::string pointCloudReading_json;
 	std::string signalStatus_json;
 	std::string systemOperationState_json;
 	std::string networkStatus_json;
 	std::string geolocation_json;
+	std::string conning_json;
 
 public:
 
@@ -41,6 +43,14 @@ public:
 		componentInfo_json = msg;		
 	}
 
+	std::string getComponentInfo() {
+		return componentInfo_json;
+	}
+	
+	void setSignalInfo(std::string msg) {
+		signalInfo_json = msg;
+	}
+	
 	std::string getSignalInfo() {
 		return signalInfo_json;
 	}
@@ -84,6 +94,14 @@ public:
 	std::string getPressureReading() {
 		return pressureReading_json;
 	}
+	
+	void setTemperatureReading(std::string msg) {
+		temperatureReading_json = msg;		
+	}
+
+	std::string getTemperatureReading() {
+		return temperatureReading_json;
+	}
 
 	void setImageReadingShared(std::string msg) {
 		imageReadingShared_json = msg;		
@@ -93,19 +111,19 @@ public:
 		return imageReadingShared_json;
 	}
 
-	void setPointCloudReadingShared(std::string msg) {
-		pointCloudReadingShared_json = msg;		
+	void setPointCloudReading(std::string msg) {
+		pointCloudReading_json = msg;		
 	}
 
-	std::string getPointCloudReadingShared() {
-		return pointCloudReadingShared_json;
+	std::string getPointCloudReading() {
+		return pointCloudReading_json;
 	}
 
-	void setSignalStatus(std::string msg) {
+	void setSignalStatusMessage(std::string msg) {
 		signalStatus_json = msg;		
 	}
 
-	std::string getSignalStatus() {
+	std::string getSignalStatusMessage() {
 		return signalStatus_json;
 	}
 
@@ -117,11 +135,11 @@ public:
 		return systemOperationState_json;
 	}
 
-	void setNetworkStatus(std::string msg) {
+	void setNetworkStatusMessage(std::string msg) {
 		networkStatus_json = msg;		
 	}
 
-	std::string getetworkStatus() {
+	std::string getNetworkStatusMessage() {
 		return networkStatus_json;
 	}
 
@@ -132,4 +150,12 @@ public:
 	std::string getGeolocation() {
 		return geolocation_json;
 	}
-}
+	
+	void setConning(std::string msg) {
+		conning_json = msg;		
+	}
+
+	std::string getConning() {
+		return conning_json;
+	}
+};
