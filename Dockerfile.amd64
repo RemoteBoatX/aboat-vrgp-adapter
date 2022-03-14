@@ -15,7 +15,7 @@ ENV VRGP_IP_PATH=$vrgp_ip_path
 
 RUN git clone https://github.com/zaphoyd/websocketpp /aboat-vrgp-adapter/websocketpp
 RUN git clone https://github.com/nlohmann/json /aboat-vrgp-adapter/nlohmann
-RUN curl -o /aboat-vrgp-adapter/src/cluon-complete.hpp https://chrberger.github.io/libcluon/headeronly/cluon-complete.hpp
+#RUN curl -o /aboat-vrgp-adapter/src/cluon-complete.hpp https://chrberger.github.io/libcluon/headeronly/cluon-complete.hpp
 
 FROM env_set
 
